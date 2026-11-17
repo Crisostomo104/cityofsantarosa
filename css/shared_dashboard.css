@@ -1,0 +1,609 @@
+/* ── SIDEBAR USER ACTION ── */
+.sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: calc(100% - 24px);
+    margin: 6px 12px 12px;
+    padding: 10px 12px;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 12px;
+    background: rgba(255,255,255,.12);
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+}
+
+.sidebar-user:hover {
+    background: rgba(255,255,255,.2);
+    transform: translateY(-1px);
+}
+
+.sidebar-user-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.18);
+}
+
+.sidebar-user-name {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: normal;
+    word-break: break-word;
+    flex: 1;
+}
+
+/* ── USER DROPDOWN MENU ── */
+.sidebar {
+    overflow-x: visible;
+}
+.user-dropdown-container {
+    position: relative;
+    width: auto;
+    margin: 6px 12px 12px;
+    overflow: visible;
+}
+
+.user-dropdown-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: none;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    box-shadow: 0 18px 36px rgba(15, 23, 42, 0.28);
+    border-radius: 10px;
+    padding: 4px 0;
+    z-index: 1100;
+    min-width: 0;
+    max-width: 180px;
+    width: auto;
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+}
+
+.dropdown-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    color: #f8fafc;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+    transition: background .2s ease, transform .2s ease;
+    border-radius: 8px;
+    margin: 0 4px;
+}
+
+.user-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: var(--arrow-left, 24px);
+    width: 12px;
+    height: 12px;
+    background: rgba(15, 23, 42, 0.95);
+    transform: rotate(45deg);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+.user-dropdown-menu.show {
+    display: block;
+}
+
+.stat-card{
+    background: white;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.dropdown-logout {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    color: #f8fafc;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    transition: background .2s ease;
+    border-radius: 10px;
+    margin: 0 6px;
+}
+
+.dropdown-logout:hover {
+    background: rgba(255,255,255,.12);
+}
+
+
+/* ── NOTIFICATION BELL ── */
+.notif-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.notif-bell {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    position: relative;
+    padding: 4px 8px;
+    line-height: 1;
+    transition: transform .2s;
+}
+
+.notif-bell:hover {
+    transform: scale(1.15);
+}
+
+.notif-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #ef4444;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    line-height: 1;
+    border: 2px solid #8E1B1B;
+    animation: notifPulse 2s infinite;
+}
+
+@keyframes notifPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.1); }
+}
+
+.notif-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 340px;
+    max-height: 420px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .18);
+    z-index: 2000;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+}
+
+.notif-dropdown.notif-open {
+    display: flex;
+    animation: notifSlide .2s ease;
+}
+
+@keyframes notifSlide {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes notifSlideCentered {
+    from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.notif-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    font-weight: 700;
+    font-size: 14px;
+    color: #0f172a;
+}
+
+.notif-header button {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+}
+
+.notif-header button:hover {
+    text-decoration: underline;
+}
+
+.notif-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.notif-actions button {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+}
+
+.notif-actions button:hover {
+    text-decoration: underline;
+}
+
+.notif-list {
+    overflow-y: auto;
+    flex: 1;
+    max-height: 360px;
+}
+
+.notif-item {
+    position: relative;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: background .15s;
+}
+
+.notif-item:hover {
+    background: #f8fafc;
+}
+
+.notif-item.unread {
+    background: #eff6ff;
+    border-left: 3px solid #3b82f6;
+}
+
+.notif-item.unread:hover {
+    background: #dbeafe;
+}
+
+.notif-delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+}
+
+.notif-delete-btn:hover {
+    color: #ef4444;
+}
+
+.notif-msg {
+    font-size: 13px;
+    color: #1e293b;
+    line-height: 1.4;
+    margin-bottom: 4px;
+}
+
+.notif-time {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.notif-empty {
+    padding: 40px 16px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+/* ── HAMBURGER BUTTON (all dashboards) ── */
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+}
+
+/* ── SIDEBAR OVERLAY BACKDROP ── */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 998;
+}
+
+.sidebar-overlay.open {
+    display: block;
+}
+
+/* ── DASHBOARD LOADING OVERLAY ── */
+.dashboard-loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(248, 250, 252, 0.92);
+    backdrop-filter: blur(4px);
+    transition: opacity .25s ease, visibility .25s ease;
+    cursor: wait;
+}
+
+.dashboard-loading-overlay.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.dashboard-loading-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 24px 28px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.14);
+    border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.dashboard-loading-spinner {
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    border: 4px solid rgba(148, 163, 184, 0.2);
+    border-top-color: #8E1B1B;
+    animation: dashboardSpin 0.9s linear infinite;
+}
+
+.dashboard-loading-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    letter-spacing: 0.2px;
+}
+
+@keyframes dashboardSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── REQUEST TABLE TOOLBAR STYLE ── */
+.request-table-header {
+    gap: 1rem;
+}
+
+.request-table-controls {
+    align-items: center;
+}
+
+.request-table-controls .request-search {
+    min-width: 260px;
+    max-width: 420px;
+    border-radius: 999px;
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    padding-left: 1.1rem;
+}
+
+.request-table-controls .request-search::placeholder {
+    color: #64748b;
+}
+
+@media (max-width: 575px) {
+    .panel::before { opacity: 0.04; background-position: top; }
+}
+
+.request-table-controls .request-filter {
+    min-width: 170px;
+    border-radius: 999px;
+}
+
+/* Employee & Resident Search Inputs */
+.emp-search, .res-search {
+    min-width: 260px;
+    max-width: 420px;
+    border-radius: 999px;
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    padding-left: 1.1rem;
+    font-size: 0.95rem;
+}
+
+#empPageInfo, #resPageInfo, #reqPageInfo {
+    font-size: 0.95rem;
+}
+
+#empPagination, #resPagination, #reqPagination {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#empPagination .btn, #resPagination .btn, #reqPagination .btn {
+    min-width: 92px;
+    border-radius: 999px;
+}
+
+#empPagination .btn-outline-secondary, #resPagination .btn-outline-secondary, #reqPagination .btn-outline-secondary {
+    color: #334155;
+    border-color: #cbd5e1;
+}
+
+#empPagination .btn-outline-secondary:hover, #resPagination .btn-outline-secondary:hover, #reqPagination .btn-outline-secondary:hover {
+    color: white;
+    border-color: black;
+    background: black;
+}
+
+/* ── MOBILE RESPONSIVE ── */
+@media (max-width: 768px) {
+
+    .hamburger {
+        display: block;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform .28s cubic-bezier(.4, 0, .2, 1);
+        z-index: 1001;
+        max-height: calc(100vh - 52px);
+        height: calc(100vh - 52px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 24px;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+        padding: 16px;
+    }
+
+    .top-bar h5 {
+        font-size: 13px;
+    }
+
+    .top-bar {
+        padding: 0 12px;
+    }
+
+    /* Notification dropdown — fixed full-width on mobile */
+    .notif-dropdown {
+        position: fixed;
+        width: calc(100vw - 32px);
+        left: 16px;
+        right: 16px;
+        transform: none;
+        top: 60px;
+        max-width: none;
+        max-height: calc(100vh - 80px);
+        padding-bottom: 6px;
+        z-index: 9999;
+    }
+
+    .notif-dropdown.notif-open {
+        animation: notifSlide .2s ease;
+    }
+
+    /* Hide caret on mobile */
+    .notif-dropdown::before {
+        display: none;
+    }
+
+    .notif-list {
+        padding: 6px 0;
+    }
+
+    .notif-item {
+        padding: 10px 16px;
+        border-radius: 8px;
+        margin: 6px 10px;
+    }
+
+    /* Sub-tab bar scrollable */
+    .ov-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        flex-wrap: nowrap;
+    }
+
+    .ov-tab {
+        flex-shrink: 0;
+        font-size: 12px;
+        padding: 8px 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .top-bar {
+        padding: 0 10px;
+    }
+
+    .-content {
+        padding: 10px;
+    }
+}
+
+/* ── ALERT AUTO-DISMISS FADE OUT ── */
+.alert-autodismiss-out {
+    animation: alertFadeOut 0.5s ease forwards;
+}
+
+@keyframes alertFadeOut {
+    0% {
+        opacity: 1;
+        max-height: 200px;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-top: revert;
+        padding-bottom: revert;
+    }
+    60% {
+        opacity: 0;
+        max-height: 200px;
+    }
+    100% {
+        opacity: 0;
+        max-height: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        overflow: hidden;
+    }
+}
+
+/* =====================================================
+   ICON-ONLY ACTION BUTTONS
+   Purpose: Table row actions without button box/border —
+   just the SVG icon, colored per action, with hover feedback.
+===================================================== */
+.icon-action-btn {
+    background: transparent;
+    border: none;
+    padding: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.15s ease, transform 0.1s ease;
+    line-height: 0;
+}
+
+.icon-action-btn:hover {
+    background: rgba(0, 0, 0, 0.06);
+    transform: scale(1.1);
+}
+
+.icon-action-btn:active {
+    transform: scale(0.95);
+}
+
+/* Color variants — matches old btn-success/btn-danger/etc semantics */
+.icon-action-btn.icon-success { color: #22c55e; }
+.icon-action-btn.icon-danger  { color: #ef4444; }
+.icon-action-btn.icon-warning { color: #f59e0b; }
+.icon-action-btn.icon-primary { color: #0d6efd; }
+.icon-action-btn.icon-muted   { color: #64748b; }

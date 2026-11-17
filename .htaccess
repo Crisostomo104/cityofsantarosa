@@ -1,0 +1,106 @@
+# E-INQUIRE v2 - Apache security hardening
+
+# 1. Disable directory listing and content negotiation surprises.
+Options -Indexes -MultiViews
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 0. Force HTTPS (safe behind proxy/Cloudflare, no redirect loop).
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # 2. Block direct access to private application folders and hidden paths.
+    RewriteRule (^|/)\.(?!well-known(?:/|$)) - [F,L]
+    RewriteRule ^(config|core|data|partials|db|vendor)(/.*)?$ - [F,L]
+
+    # --- Pretty URLs: remove .php extension ---
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}\.php -f
+    RewriteRule ^(.+)$ $1.php [L,QSA]
+
+    # Route /erequest-mo or /erequest-mo/ to index3.php
+    RewriteRule ^erequest-mo/?$ index3.php [L,QSA]
+
+    # 10. Block common exploit probes in query strings.
+    RewriteCond %{QUERY_STRING} (\%00|%00) [NC,OR]
+    RewriteCond %{QUERY_STRING} (base64_encode|eval\() [NC,OR]
+    RewriteCond %{QUERY_STRING} (union.*select|select.*from) [NC,OR]
+    RewriteCond %{QUERY_STRING} (<script|javascript:|vbscript:) [NC]
+    RewriteRule ^ - [F,L]
+
+    # 11. Block obvious scanner user agents.
+    RewriteCond %{HTTP_USER_AGENT} (sqlmap|nikto|nmap|masscan|zgrab|scanner) [NC]
+    RewriteRule ^ - [F,L]
+</IfModule>
+
+# 2.5 Custom error pages
+ErrorDocument 403 /cityofsantarosa/errors/403.php
+ErrorDocument 404 /cityofsantarosa/errors/404.php
+
+# 3. Block sensitive file types from direct HTTP access.
+<FilesMatch "\.(env|json|sql|log|lock|ps1|sh|bak|old|orig|save|swp|tmp|git|htpasswd|pem|key|crt|ini|conf|yml|yaml)$">
+    Require all denied
+</FilesMatch>
+
+# 4. Block common project metadata and dependency manifests.
+<FilesMatch "^(composer\.(json|lock)|package\.json|package-lock\.json|\.gitignore|\.gitattributes|Makefile|README\.md)$">
+    Require all denied
+</FilesMatch>
+
+# 5. Block hidden files by filename as a fallback.
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+<Files ".htaccess">
+    Require all denied
+</Files>
+
+# 6. HTTP security headers.
+<IfModule mod_headers.c>
+    # HSTS: start small (5 min). Once everything works, change to 31536000 (1 year).
+    Header always set Strict-Transport-Security "max-age=300"
+
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://santarosacity.gov.ph https://connect.facebook.net https://www.facebook.com https://www.youtube.com https://www.paypal.com https://www.paypalobjects.com https://sandbox.paypal.com https://www.google.com/recaptcha/ https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://santarosacity.gov.ph; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://santarosacity.gov.ph; img-src 'self' data: https: blob:; connect-src 'self' https://api.semaphore.co https://api.paymongo.com https://www.paypal.com https://api-m.sandbox.paypal.com https://api-m.paypal.com https://cdn.jsdelivr.net; frame-src 'self' https://www.facebook.com https://www.youtube.com https://www.youtube-nocookie.com https://www.paypal.com https://www.sandbox.paypal.com https://www.google.com/recaptcha/; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests;"
+
+    Header always unset X-Powered-By
+    Header always unset Server
+</IfModule>
+
+# 7. Disable Apache-generated server signatures.
+ServerSignature Off
+
+# 9. Cache static assets.
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css                  "access plus 1 month"
+    ExpiresByType application/javascript    "access plus 1 month"
+    ExpiresByType image/png                 "access plus 1 month"
+    ExpiresByType image/jpg                 "access plus 1 month"
+    ExpiresByType image/jpeg                "access plus 1 month"
+    ExpiresByType image/gif                 "access plus 1 month"
+    ExpiresByType image/webp                "access plus 1 month"
+    ExpiresByType image/svg+xml             "access plus 1 month"
+</IfModule>
+
+# 12. PHP configuration overrides (only if using mod_php).
+<IfModule mod_php.c>
+    php_flag expose_php Off
+    php_flag display_errors Off
+    php_flag display_startup_errors Off
+    php_flag log_errors On
+    php_flag session.cookie_httponly On
+    # Change to On once HTTPS is confirmed working
+    php_flag session.cookie_secure Off
+    php_value session.cookie_samesite "Lax"
+    php_value session.use_strict_mode 1
+    php_value session.use_only_cookies 1
+</IfModule>

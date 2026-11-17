@@ -1,0 +1,815 @@
+/* =====================================================
+   VARIABLES / THEME COLORS
+   Purpose: Centralized colors for registration page
+===================================================== */
+:root {
+  --primary-yellow: #F4C542;
+  --light-yellow: #FFE680;
+  --gold: #D4A017;
+  --red: #C62828;
+  --dark-red: #8E1B1B;
+  --text-dark: #333;
+}
+
+/* =====================================================
+   BODY
+   Purpose: Center container, background gradient animation
+===================================================== */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden; /* FIX: safety net against any stray overflow pushing horizontal scroll on mobile */
+}
+
+body {
+  background: linear-gradient(135deg, #fff0f1 0%, #fff6e8 100%);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+  background-size: 200% 200%;
+  margin: 0;
+  padding: 0;
+  /* Bigger gradient to allow smooth animation */
+  animation: gradientAnimation 15s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* =====================================================
+   CUSTOM CONTAINER
+   Purpose: Overrides Bootstrap, main form wrapper
+===================================================== */
+.desktop-shell {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
+.my-container {
+  background: #fff;
+  padding: 40px 30px !important;
+  border-radius: 15px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 100% !important;
+  max-width: 920px !important;
+  text-align: center;
+  border-top: 6px solid var(--gold);
+  box-sizing: border-box;
+  animation: fadeUp 0.6s ease;
+}
+
+.input-icon-wrapper {
+  position: relative;
+}
+
+.input-icon-wrapper input {
+  padding-right: 40px;
+}
+
+.input-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #999;
+  pointer-events: none;
+}
+
+/* FIX: terms label no longer forced onto one line — was overflowing narrow
+   viewports because "I agree to the Terms and Conditions *" doesn't fit
+   on screens under ~600px wide. Wraps by default now, locks to one line
+   only once there's enough room (see the >=900px media query below). */
+.terms-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: normal;
+  white-space: normal;
+  flex-wrap: wrap;
+  overflow-wrap: break-word;
+}
+
+.terms-label a {
+  white-space: normal;
+}
+
+@media (max-width: 640px) {
+  .my-container {
+    width: auto !important;
+    max-width: 100% !important;
+    padding: 28px 20px !important;
+    margin: 14px;
+  }
+}
+
+.my-container .button-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 12px;
+}
+
+.my-container .button-row button {
+  width: 100%;
+  padding: 10px 18px;
+}
+
+.my-container .button-row .btn-outline {
+  width: auto;
+  min-width: 120px;
+  padding: 10px 16px;
+  justify-self: center;
+}
+
+/* =====================================================
+   REGISTRATION TWO-COLUMN LAYOUT
+   Purpose: Left column = personal info fields,
+   right column = government ID upload. Terms/Register/
+   Login/Back-to-Home are separate siblings positioned by
+   grid-area: mobile order is fields -> id -> terms ->
+   buttons (natural single-column flow); desktop keeps
+   terms/buttons under the fields column while the ID
+   column runs alongside the full height.
+===================================================== */
+.reg-two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "fields"
+    "id"
+    "terms"
+    "buttons";
+  gap: 16px;
+  width: 100%;
+  min-width: 0; /* FIX: prevents grid children with long text/inputs from forcing the grid track wider than the container */
+}
+
+.reg-col-fields {
+  grid-area: fields;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* FIX: allows flex column to shrink below content size instead of overflowing */
+}
+
+.reg-col-id {
+  grid-area: id;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.reg-two-col > .terms-login-row {
+  grid-area: terms;
+  min-width: 0;
+}
+
+.reg-two-col > .button-row {
+  grid-area: buttons;
+}
+
+@media (min-width: 900px) {
+  .reg-two-col {
+    grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr);
+    grid-template-areas:
+      "fields id"
+      "terms  id"
+      "buttons id";
+    align-items: start;
+    gap: 16px 24px;
+  }
+
+  /* Now that there's enough horizontal room, allow the terms label
+     and bottom-text to sit on a single line again. */
+  .terms-label {
+    white-space: nowrap;
+    flex-wrap: nowrap;
+  }
+
+  .terms-label a {
+    white-space: nowrap;
+  }
+
+  .my-container .bottom-text {
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 900px) {
+  .desktop-shell {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  .my-container {
+    max-width: 100% !important;
+    padding: 36px 36px !important;
+  }
+
+  .desktop-grid.three-column {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .desktop-grid.two-column {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .desktop-grid.upload-preview-row {
+    align-items: start;
+    grid-template-columns: minmax(220px, 1fr) 240px;
+    gap: 16px;
+  }
+
+  .desktop-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .desktop-row.button-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .terms-login-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .terms-login-row .terms-field,
+  .terms-login-row .recaptcha-field {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .terms-login-row .bottom-text {
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .bottom-text {
+    margin: 14px 0;
+  }
+
+  .button-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* =====================================================
+   RECAPTCHA POSITIONING
+   Purpose: keep the widget centered and prevent overflow
+   on narrow phones (Google's widget is a fixed ~304px box)
+===================================================== */
+.recaptcha-field {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  overflow: hidden; /* clips the scaled-down widget instead of letting it push layout width */
+}
+
+.recaptcha-field .g-recaptcha {
+  transform-origin: center top;
+}
+
+@media (max-width: 400px) {
+  .recaptcha-field .g-recaptcha {
+    transform: scale(0.87);
+  }
+}
+
+@media (max-width: 340px) {
+  .recaptcha-field .g-recaptcha {
+    transform: scale(0.78);
+  }
+}
+
+@media (max-width: 900px) {
+  .desktop-grid.three-column,
+  .desktop-grid.two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .desktop-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .my-container .button-row {
+    grid-template-columns: 1fr;
+  }
+
+  .my-container .button-row .btn-outline {
+    justify-self: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .my-container {
+    width: auto !important;
+    max-width: 100% !important;
+    padding: 28px 20px !important;
+    margin: 14px;
+  }
+
+  .my-container .btn-outline {
+    margin: 10px auto 0;
+    display: inline-flex;
+    width: auto;
+    padding: 10px 18px;
+  }
+
+  /* FIX: the ID-upload action buttons (Take Photo / Choose from Gallery)
+     were sitting side by side via inline flex styles in the HTML and could
+     get clipped or squeezed on very narrow phones (~360px). Stack them. */
+  #idCameraBtn,
+  #idGalleryBtn {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+}
+
+/* HEADINGS */
+.my-container h1 {
+  color: var(--red);
+  font-weight: 700;
+  margin-bottom: 25px;
+  font-size: 2rem;
+}
+
+@media (max-width: 480px) {
+  .my-container h1 {
+    font-size: 1.6rem; /* FIX: prevents heading from feeling oversized on small phones */
+  }
+}
+
+/* =====================================================
+   FORM GROUPS
+   Purpose: Labels, inputs, and spacing
+===================================================== */
+.my-container form .form-group {
+  margin-bottom: 15px;
+  text-align: left;
+  min-width: 0; /* FIX: form-group is a grid/flex child in several layouts; without this, long placeholder text/values can force the track wider than the viewport */
+}
+
+.my-container form .form-group label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+
+.my-container form .form-group input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid #e1e5e9;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+
+.my-container form .form-group select {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid #e1e5e9;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: 0.3s;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.upload-preview-box {
+  width: 100%;
+  min-height: 220px;
+  max-height: 220px;
+  border: 2px dashed #e1e5e9;
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: #fafafa;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.upload-preview-box.clickable {
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .upload-preview-box {
+    width: 100%;
+  }
+}
+
+.preview-hint {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 8px auto 0;
+  max-width: 240px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.upload-preview-box img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  display: block;
+}
+
+.scan-loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 35, 0.72);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  z-index: 1080;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.scan-loading-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scan-loading-card {
+  width: min(92vw, 420px);
+  padding: 26px 24px;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.18);
+  text-align: center;
+}
+
+.scan-loader {
+  display: inline-grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.scan-loader div {
+  width: 12px;
+  height: 48px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #e2e8f0, #3b82f6);
+  animation: scanPulse 1.1s ease-in-out infinite;
+}
+
+.scan-loader div:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.scan-loader div:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+.scan-loader div:nth-child(4) {
+  animation-delay: 0.36s;
+}
+
+@keyframes scanPulse {
+  0%, 100% {
+    transform: scaleY(0.7);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scaleY(1.3);
+    opacity: 1;
+  }
+}
+
+.scan-loading-text {
+  font-size: 0.98rem;
+  color: #2b2b2b;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.match-success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 35, 0.72);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  z-index: 1090;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.match-success-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.match-success-card {
+  width: min(90vw, 360px);
+  padding: 28px 22px;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.18);
+  text-align: center;
+}
+
+.match-icon {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #22c55e, #10b981);
+  color: #fff;
+  font-size: 2.2rem;
+  font-weight: 700;
+  box-shadow: 0 12px 30px rgba(34, 197, 94, 0.3);
+  animation: matchPulse 0.9s ease forwards;
+}
+
+.match-success-text {
+  font-size: 1rem;
+  color: #18216d;
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+@keyframes matchPulse {
+  0% { transform: scale(0.85); opacity: 0; }
+  70% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+@media (min-width: 900px) {
+  .upload-preview-box {
+    min-height: 280px;
+    max-height: 280px;
+    padding: 16px;
+  }
+}
+
+#imagePreviewModal .modal-body {
+  padding: 0;
+}
+
+#imagePreviewModalImg {
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  display: block;
+  object-fit: contain;
+}
+
+.preview-placeholder {
+  font-size: 0.95rem;
+  color: #777;
+  line-height: 1.4;
+  padding: 8px;
+}
+
+.my-container form .form-group input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 8px rgba(212, 160, 23, 0.4);
+  outline: none;
+}
+
+.my-container form .form-group select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 8px rgba(212, 160, 23, 0.4);
+  outline: none;
+}
+
+/* =====================================================
+   CHECKBOX
+   Purpose: Align checkbox + label
+===================================================== */
+.my-container form .form-group input[type="checkbox"] {
+  width: auto !important;
+  display: inline-block;
+  accent-color: var(--red);
+}
+
+.terms-label input[type="checkbox"] {
+  width: 16px !important;
+  height: 16px;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* =====================================================
+   BUTTONS
+   Purpose: Primary actions (send OTP, register) + hover effects
+===================================================== */
+.my-container button {
+  width: 100%;
+  background: linear-gradient(135deg, var(--red), var(--dark-red));
+  color: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Hover glow effect */
+.my-container button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 5px 20px rgba(198, 40, 40, 0.4);
+}
+
+.my-container button[name="send_otp"],
+.my-container button[name="register"] {
+  background: linear-gradient(135deg, var(--red), var(--dark-red));
+  color: #fff;
+}
+
+.my-container button[name="send_otp"]:hover,
+.my-container button[name="register"]:hover {
+  transform: scale(1.03);
+  box-shadow: 0 5px 20px rgba(198, 40, 40, 0.4);
+}
+
+/* OUTLINE BUTTONS (secondary) */
+.my-container .btn-outline,
+.my-container .resend-btn {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  padding: 10px 20px;
+  border: 2px solid var(--gold);
+  color: var(--gold);
+  border-radius: 8px;
+  transition: 0.3s;
+  margin-top: 10px;
+  background: white;
+  font-size: 0.95rem;
+  width: auto;
+  max-width: 100%; /* FIX: guard against overflow if text is longer on smaller fonts/zoom */
+}
+
+/* FIX: "Show Both" toggle now wraps onto its own line next to the label
+   on narrow screens instead of being forced to stay glued to "Password *"
+   and potentially clipping. */
+.my-container .show-password-toggle {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gold);
+  cursor: pointer;
+  text-decoration: underline;
+  white-space: normal;
+}
+
+.my-container .show-password-toggle:hover {
+  color: var(--dark-red);
+}
+
+.my-container .btn-outline:hover,
+.my-container .resend-btn:hover {
+  background: var(--red);
+  color: white;
+  border-color: var(--red);
+}
+
+@media (max-width: 640px) {
+  .my-container .btn-outline {
+    margin: 10px auto 0;
+    display: inline-flex;
+    width: auto;
+    padding: 10px 18px;
+  }
+}
+
+/* =====================================================
+   BOTTOM TEXT LINKS
+   Purpose: "Already have account?" links, small text
+   FIX: allowed to wrap by default (locked back to nowrap at >=900px
+   above), and centered so a two-line wrap still looks intentional.
+===================================================== */
+.my-container .bottom-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  white-space: normal;
+  flex-wrap: wrap;
+  text-align: center;
+  margin: 6px 0;
+  font-size: 0.95rem;
+}
+
+.my-container .bottom-text a {
+  color: #1a73e8;
+  font-weight: normal;
+  text-decoration: underline;
+  transition: 0.3s;
+}
+
+.my-container .bottom-text a:hover {
+  color: #0f5bb5;
+}
+
+/* =====================================================
+   MESSAGES
+   Purpose: Error / success alerts in forms
+===================================================== */
+.my-container .error,
+.my-container .error-message {
+  background-color: #fdecea;
+  color: var(--dark-red);
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #f5c6cb;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.my-container .success {
+  background-color: var(--gold);
+  color: var(--text-dark);
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  text-align: center;
+  border: 1px solid #f5e1a0;
+  font-size: 1rem;
+}
+
+/* =====================================================
+   COUNTDOWN TIMER
+   Purpose: OTP resend countdown
+===================================================== */
+.my-container .countdown {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+  color: var(--text-dark);
+  font-size: 1rem;
+}
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

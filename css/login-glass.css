@@ -1,0 +1,91 @@
+/* ---- Login glassmorphism patch (v2) ----
+   I-link SA DULO ng <head>, pagkatapos ng ../css/login.css:
+   <link rel="stylesheet" href="../css/login-glass.css">
+*/
+
+/* 1) Background blobs: ito ang bibigyan ng blur ng glass card.
+      Walang HTML change, ::before / ::after lang. */
+.login-page-wrap {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+.login-page-wrap::before,
+.login-page-wrap::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    z-index: -1;
+    pointer-events: none;
+}
+.login-page-wrap::before {           /* pula: maliit, peek-out sa likod ng card */
+    width: 260px; height: 260px;
+    right: 13%; top: 16%;
+    background: rgba(142, 27, 27, 0.3);
+}
+.login-page-wrap::after {            /* dilaw: sa ilalim ng card, malayo sa text */
+    width: 300px; height: 300px;
+    right: 7%; bottom: 3%; left: auto;
+    background: rgba(253, 224, 71, 0.45);
+}
+
+/* 2) Glass card */
+.login-form-col .index-container {
+    background: rgba(255, 255, 255, 0.8) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+            backdrop-filter: blur(16px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-top: 5px solid #e6b422;    /* gold top border */
+    box-shadow:
+        0 12px 40px rgba(90, 20, 20, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+}
+
+/* 3) Solid white ang inputs para malinaw ang typing area */
+.login-form-col .index-container input[type="email"],
+.login-form-col .index-container input[type="password"],
+.login-form-col .index-container input[type="text"] {
+    background: #fff !important;
+}
+
+/* 4) reCAPTCHA: solid white na, kaya bigyan ng sariling rounded frame
+      para hindi magmukhang banyaga sa glass */
+.recaptcha-field .g-recaptcha {
+    display: inline-block;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* 5) Left panel: hindi glass, pero dagdagan ang contrast ng puting text */
+.login-info-col h2,
+.login-info-col .about-text,
+.login-info-col .about-features {
+    text-shadow: 0 1px 8px rgba(90, 20, 20, 0.45);
+}
+
+/* Fallback: walang backdrop-filter = mas solid na puti */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .login-form-col .index-container {
+        background: rgba(255, 255, 255, 0.95) !important;
+    }
+}
+
+/* Mobile: mas magaan ang blur at mas maliit ang blobs */
+@media (max-width: 768px) {
+    .login-page-wrap::before,
+    .login-page-wrap::after { width: 200px; height: 200px; filter: blur(45px); }
+    .login-form-col .index-container {
+        -webkit-backdrop-filter: blur(8px);
+                backdrop-filter: blur(8px);
+    }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    .login-form-col .index-container {
+        background: #fff !important;
+        -webkit-backdrop-filter: none;
+                backdrop-filter: none;
+    }
+}

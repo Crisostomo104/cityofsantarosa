@@ -1,0 +1,31 @@
+# Auth endpoints are public entry points, but should only serve expected requests.
+Options -Indexes -MultiViews
+
+# Block uncommon HTTP methods for this folder.
+<LimitExcept GET POST HEAD>
+    Require all denied
+</LimitExcept>
+
+# OTP endpoints are API-only. Opening them directly in a browser should not expose state.
+<FilesMatch "^(send_otp|resend_otp|verify_otp)\.php$">
+    <Limit GET HEAD>
+        Require all denied
+    </Limit>
+</FilesMatch>
+
+# This file is included by registration.php and should not be requested directly.
+<Files "registration_php.php">
+    Require all denied
+</Files>
+
+# Do not expose hidden files, backups, logs, dumps, or local config.
+<FilesMatch "(^\.|\.env$|\.(bak|old|orig|save|swp|tmp|log|sql|ini|conf|json|lock|md|txt|yml|yaml)$)">
+    Require all denied
+</FilesMatch>
+
+# Auth pages and responses should not be cached by browsers or proxies.
+<IfModule mod_headers.c>
+    Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header always set Pragma "no-cache"
+    Header always set Expires "0"
+</IfModule>
